@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiWeb3C.Server.Migrations
 {
     [DbContext(typeof(BasedeDatosContext))]
-    [Migration("20231119052708_Perry5")]
-    partial class Perry5
+    [Migration("20231122233041_inicial")]
+    partial class inicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
