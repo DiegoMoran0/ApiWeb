@@ -1,0 +1,80 @@
+﻿@page "/piloto/nueva"
+@page "/piloto/editar/{Id:int}"
+@inject HttpClient _http;
+@inject NavigationManager _navegador;
+
+<h3>@letrero Pilotos</h3>
+
+<EditForm Model="piloto" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    <div class="mb-3 row">
+        <label for="txtNombre" class="col-sm-2 col-form-label">Nombre</label>
+        <div class="col-sm-10">
+            <InputText id="txtNombre" class="form-control" @bind-Value="piloto.Nombre" />
+            <ValidationMessage For="()=>piloto.Nombre" />
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label for="txtPOrg" class="col-sm-2 col-form-label">Pais de origen</label>
+        <div class="col-sm-10">
+            <InputText id="txtPOrg" class="form-control" @bind-Value="piloto.POrg" />
+            <ValidationMessage For="()=>piloto.POrg" />
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label for="txtADebut" class="col-sm-2 col-form-label">Año de Debut</label>
+        <div class="col-sm-10">
+            <InputText id="txtADebut" class="form-control" @bind-Value="piloto.ADebut" />
+            <ValidationMessage For="()=>piloto.ADebut" />
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label for="txtPremios" class="col-sm-2 col-form-label">Premios</label>
+        <div class="col-sm-10">
+            <InputText id="txtPremios" class="form-control" @bind-Value="piloto.Premios" />
+            <ValidationMessage For="()=>piloto.Premios" />
+        </div>
+    </div>
+    <button class="btn btn-success" type="submit">Guardar</button>
+    <button class="btn btn-danger" @onclick="Cancelar">Cancelar</button>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    private Piloto piloto = new();
+    private string letrero = "Nueva";
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id == 0)
+        {
+            letrero = "Nueva";
+            piloto = new();
+        }
+        else
+        {
+            letrero = "Modificar";
+            piloto = await _http.GetFromJsonAsync<Piloto>($"api/piloto/{Id}");
+        }
+    }
+
+    private async void Guardar()
+    {
+        if (Id == 0)
+        {
+            await _http.PostAsJsonAsync<Piloto>("api/piloto", piloto);
+        }
+        else
+        {
+            await _http.PutAsJsonAsync<Piloto>($"api/piloto/{Id}", piloto);
+        }
+        _navegador.NavigateTo("/piloto");
+    }
+
+    private void Cancelar()
+    {
+        _navegador.NavigateTo("/piloto");
+    }
+}
+

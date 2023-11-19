@@ -1,0 +1,75 @@
+﻿@page "/piloto"
+@inject HttpClient _http;
+@inject NavigationManager _navegar;
+<h3>Pilotos</h3>
+@if (cargando)
+{
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Cargando...</span>
+    </div>
+}
+else
+{
+    @if (lospilotos.Count > 0)
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Pais de Origen</th>
+                    <th>Año de Debut</th>
+                    <th>Premios</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Piloto piloto in lospilotos)
+                {
+                    <tr>
+                        <td>@piloto.Nombre</td>
+                        <td>@piloto.POrg</td>
+                        <td>@piloto.ADebut</td>
+                        <td>@piloto.Premios</td>
+                        <td>
+                            <button class="btn btn-sm" @onclick="()=>Eliminar(piloto.Id)"><span class="oi oi-trash"></span></button>
+                            <button class="btn btn-sm" @onclick="()=>Modificar(piloto.Id)"><span class="oi oi-pencil"></span></button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <h2>No existen pilotos registrados</h2>
+    }
+}
+
+
+@code {
+    private List<Piloto>? lospilotos = new();
+    private bool cargando = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Cargar();
+    }
+
+    private async Task Cargar()
+    {
+        lospilotos = await _http.GetFromJsonAsync<List<Piloto>>("api/pilotos");
+        cargando = false;
+    }
+
+    private async Task Eliminar(int id)
+    {
+        cargando = true;
+        await _http.DeleteAsync($"api/pilotos/{id}");
+        await Cargar();
+    }
+
+    private void Modificar(int id)
+    {
+        _navegar.NavigateTo($"/pilotos/editar/{id}");
+    }
+}

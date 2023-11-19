@@ -1,0 +1,17 @@
+﻿using ApiWeb3C.Shared.Modelos;
+using Microsoft.EntityFrameworkCore;
+
+namespace ApiWeb3C.Server.Data
+{
+    public class BasedeDatosContext : DbContext
+    {
+        public BasedeDatosContext(DbContextOptions<BasedeDatosContext> options) : base(options)
+        {
+
+        }
+
+        public DbSet<Persona> Personas { get; set; }
+        public DbSet<Clasificacion> Clasificaciones { get; set; }
+        public DbSet<Piloto> Piloto { get; set; }
+    }
+}

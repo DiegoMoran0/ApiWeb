@@ -1,0 +1,121 @@
+﻿@page "/nueva"
+@page "/nueva/{Id:int}"
+@inject HttpClient _http;
+@inject NavigationManager _navegador;
+
+<h3>@letrero Persona</h3>
+
+<EditForm Model="lapersona" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    <div class="mb-3 row">
+        <label for="txtNombre" class="col-sm-2 col-form-label">Nombre</label>
+        <div class="col-sm-10">
+            <InputText id="txtNombre" class="form-control" @bind-Value="lapersona.Nombre" />
+            <ValidationMessage For="()=>lapersona.Nombre" />
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label for="txtPaisOrg" class="col-sm-2 col-form-label">Pais de Origen</label>
+        <div class="col-sm-10">
+            <InputText id="txtPaisOrg" class="form-control" @bind-Value="lapersona.PaisOrg" />
+            <ValidationMessage For="()=>lapersona.PaisOrg" />
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label for="txtLongitud" class="col-sm-2 col-form-label">Longitud</label>
+        <div class="col-sm-10">
+            <InputText id="txtLongitud" class="form-control" @bind-Value="lapersona.Longitud" />
+            <ValidationMessage For="()=>lapersona.Longitud" />
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label for="txtUbicacion" class="col-sm-2 col-form-label">Ubicacion</label>
+        <div class="col-sm-10">
+            <InputText id="txtUbicacion" class="form-control" @bind-Value="lapersona.Ubicacion" />
+            <ValidationMessage For="()=>lapersona.Ubicacion" />
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label for="txtNVueltas" class="col-sm-2 col-form-label">Numero de Vueltas</label>
+        <div class="col-sm-10">
+            <InputText id="txtNVueltas" class="form-control" @bind-Value="lapersona.NVueltas" />
+            <ValidationMessage For="()=>lapersona.NVueltas" />
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label for="txtRVueltas" class="col-sm-2 col-form-label">Record de Vueltas</label>
+        <div class="col-sm-10">
+            <InputText id="txtRVueltas" class="form-control" @bind-Value="lapersona.RVueltas" />
+            <ValidationMessage For="()=>lapersona.RVueltas" />
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label for="txtClasificacion" class="col-sm-2 col-form-label">Clasificación</label>
+        <div class="col-sm-10">
+            <InputSelect class="form-control" @bind-Value="lapersona.ClasificacionId">
+                @foreach (Clasificacion clasificacion in lasclacificaciones)
+                {
+                    <option value="@clasificacion.Id">@clasificacion.Nombre</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="()=>lapersona.Id" />
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label for="txtPiloto" class="col-sm-2 col-form-label">Piloto</label>
+        <div class="col-sm-10">
+            <InputSelect class="form-control" @bind-Value="lapersona.PilotoId">
+                @foreach (Piloto piloto in lospilotos)
+                {
+                    <option value="@piloto.Id">@piloto.Nombre</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="()=>lapersona.Id" />
+        </div>
+    </div>
+    <button class="btn btn-success" type="submit">Guardar</button>
+    <button class="btn btn-danger" @onclick="Cancelar">Cancelar</button>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    private Persona lapersona = new();
+    private string letrero = "Nueva";
+    private List<Clasificacion> lasclacificaciones = new();
+    private List<Piloto> lospilotos = new();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        lasclacificaciones = await _http.GetFromJsonAsync<List<Clasificacion>>("api/clasificaciones");
+        if (Id == 0)
+        {
+            letrero = "Nueva";
+            lapersona = new();
+            lapersona.ClasificacionId = lasclacificaciones[0].Id;
+        }
+        else
+        {
+            letrero = "Modificar";
+            lapersona = await _http.GetFromJsonAsync<Persona>($"api/personas/{Id}");
+        }
+    }
+
+    private async void Guardar()
+    {
+        if (Id == 0)
+        {
+            await _http.PostAsJsonAsync<Persona>("api/personas", lapersona);
+        }
+        else
+        {
+            await _http.PutAsJsonAsync<Persona>($"api/personas/{Id}", lapersona);
+        }
+        _navegador.NavigateTo("/");
+    }
+
+    private void Cancelar()
+    {
+        _navegador.NavigateTo("/");
+    }
+}
