@@ -3,7 +3,7 @@
 @inject HttpClient _http;
 @inject NavigationManager _navegador;
 
-<h3>@letrero Clasificación</h3>
+<h3>@letrero Equipo</h3>
 
 <EditForm Model="laclasificacion" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
@@ -67,10 +67,16 @@
 
     protected override async Task OnParametersSetAsync()
     {
+        lospilotos = await _http.GetFromJsonAsync<List<Piloto>>("api/pilotos");
         if (Id == 0)
         {
             letrero = "Nueva";
             laclasificacion = new();
+
+            if (lospilotos != null && lospilotos.Count > 0)
+            {
+                laclasificacion.PilotoId = lospilotos[0].Id;
+            }
         }
         else
         {

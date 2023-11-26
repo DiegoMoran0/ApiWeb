@@ -1,4 +1,4 @@
-﻿@page "/piloto/nueva"
+﻿@page "/piloto/nuevo"
 @page "/piloto/editar/{Id:int}"
 @inject HttpClient _http;
 @inject NavigationManager _navegador;
@@ -55,7 +55,7 @@
         else
         {
             letrero = "Modificar";
-            piloto = await _http.GetFromJsonAsync<Piloto>($"api/piloto/{Id}");
+            piloto = await _http.GetFromJsonAsync<Piloto>($"api/pilotos/{Id}");
         }
     }
 
@@ -63,18 +63,18 @@
     {
         if (Id == 0)
         {
-            await _http.PostAsJsonAsync<Piloto>("api/piloto", piloto);
+            await _http.PostAsJsonAsync<Piloto>("api/pilotos", piloto);
         }
         else
         {
-            await _http.PutAsJsonAsync<Piloto>($"api/piloto/{Id}", piloto);
+            await _http.PutAsJsonAsync<Piloto>($"api/pilotos/{Id}", piloto);
         }
-        _navegador.NavigateTo("/piloto");
+        _navegador.NavigateTo("/pilotos");
     }
 
     private void Cancelar()
     {
-        _navegador.NavigateTo("/piloto");
+        _navegador.NavigateTo("/pilotos");
     }
 }
 

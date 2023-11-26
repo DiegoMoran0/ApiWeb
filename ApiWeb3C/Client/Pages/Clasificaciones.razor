@@ -1,7 +1,7 @@
 ﻿@page "/clasificaciones"
 @inject HttpClient _http;
 @inject NavigationManager _navegar;
-<h3>Clasificaciones</h3>
+<h3>Equipos</h3>
 @if (cargando)
 {
     <div class="spinner-border" role="status">
@@ -25,7 +25,7 @@ else
                 </tr>
             </thead>
             <tbody>
-                @foreach (Clasificacion clasificacion in lasclasificaciones)
+                @foreach (ClasificacionDTO clasificacion in lasclasificaciones)
                 {
                     <tr>
                         <td>@clasificacion.Nombre</td>
@@ -33,7 +33,7 @@ else
                         <td>@clasificacion.Sede</td>
                         <td>@clasificacion.Premios</td>
                         <td>@clasificacion.Socios</td>
-                        <td>@clasificacion.Piloto</td>
+                        <td>@clasificacion.Piloto.Nombre</td>
                         <td>
                             <button class="btn btn-sm" @onclick="()=>Eliminar(clasificacion.Id)"><span class="oi oi-trash"></span></button>
                             <button class="btn btn-sm" @onclick="()=>Modificar(clasificacion.Id)"><span class="oi oi-pencil"></span></button>
@@ -45,13 +45,13 @@ else
     }
     else
     {
-        <h2>No existen clasificaciones registradas</h2>
+        <h2>No existen equipos registradas</h2>
     }
 }
 
 
 @code {
-    private List<Clasificacion>? lasclasificaciones = new();
+    private List<ClasificacionDTO>? lasclasificaciones = new();
     private bool cargando = true;
 
     protected override async Task OnInitializedAsync()
@@ -61,7 +61,7 @@ else
 
     private async Task Cargar()
     {
-        lasclasificaciones = await _http.GetFromJsonAsync<List<Clasificacion>>("api/clasificaciones");
+        lasclasificaciones = await _http.GetFromJsonAsync<List<ClasificacionDTO>>("api/clasificaciones");
         cargando = false;
     }
 

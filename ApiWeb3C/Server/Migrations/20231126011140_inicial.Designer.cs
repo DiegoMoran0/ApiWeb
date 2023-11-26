@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiWeb3C.Server.Migrations
 {
     [DbContext(typeof(BasedeDatosContext))]
-    [Migration("20231122233041_inicial")]
+    [Migration("20231126011140_inicial")]
     partial class inicial
     {
         /// <inheritdoc />
@@ -100,11 +100,6 @@ namespace ApiWeb3C.Server.Migrations
 
                     b.Property<int>("PilotoId")
                         .HasColumnType("int");
-
-                    b.Property<string>("RVueltas")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Ubicacion")
                         .IsRequired()

@@ -29,7 +29,7 @@ namespace ApiWeb3C.Server.Controllers
           {
               return NotFound();
           }
-            return await _context.Personas.ToListAsync();
+            return await _context.Personas.Include(c => c.Clasificacion).Include(h => h.Piloto).ToListAsync();
         }
 
         // GET: api/Personas1/5

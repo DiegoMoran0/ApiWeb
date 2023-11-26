@@ -1,7 +1,7 @@
 ﻿@page "/"
 @inject HttpClient _http;
 @inject NavigationManager _navegar;
-<h3>Personas</h3>
+<h3>Gran Premio</h3>
 @if (cargando)
 {
     <div class="spinner-border" role="status">
@@ -15,13 +15,14 @@ else
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Nombre</th>
+                    <th>Nombre del Premio</th>
                     <th>Pais de origen</th>
-                    <th>Longitud</th>
+                    <th>Longitud (Km)</th>
                     <th>Ubicación</th>
                     <th>Núm. De vueltas</th>
-                    <th>Equipo</th>
-                    <th>Piloto</th>
+                    <th>Vuelta mas Rapida</th>
+                    <th>Equipo Ganador</th>
+                    <th>Piloto Campeon</th>
                 </tr>
             </thead>
             <tbody>
@@ -34,8 +35,8 @@ else
                         <td>@persona.Ubicacion</td>
                         <td>@persona.NVueltas</td>
                         <td>@persona.RVueltas</td>
-                        <td>@persona.Clasificacion</td>
-                        <td>@persona.Piloto</td>
+                        <td>@persona.Clasificacion.Nombre</td>
+                        <td>@persona.Piloto.Nombre</td>
                         <td>
                             <button class="btn btn-sm" @onclick="()=>Eliminar(persona.Id)"><span class="oi oi-trash"></span></button>
                             <button class="btn btn-sm" @onclick="()=>Modificar(persona.Id)"><span class="oi oi-pencil"></span></button>
@@ -47,7 +48,7 @@ else
     }
     else
     {
-        <h2>No existen personas registradas</h2>
+        <h2>No existen pistas registradas</h2>
     }
 }
 

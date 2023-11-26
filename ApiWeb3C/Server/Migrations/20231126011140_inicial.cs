@@ -47,7 +47,7 @@ namespace ApiWeb3C.Server.Migrations
                         column: x => x.PilotoId,
                         principalTable: "Piloto",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -61,7 +61,6 @@ namespace ApiWeb3C.Server.Migrations
                     Longitud = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Ubicacion = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     NVueltas = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    RVueltas = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     ClasificacionId = table.Column<int>(type: "int", nullable: false),
                     PilotoId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -73,13 +72,13 @@ namespace ApiWeb3C.Server.Migrations
                         column: x => x.ClasificacionId,
                         principalTable: "Clasificaciones",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Personas_Piloto_PilotoId",
                         column: x => x.PilotoId,
                         principalTable: "Piloto",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
